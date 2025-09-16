@@ -58,5 +58,40 @@ namespace ResearchReportsAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var deleted = await _reportRepository.DeleteReportByIdAsync(id);
+                if (!deleted)
+                    return NotFound($"Report with Id {id} not found.");
+
+                return Ok(new { message = $"Report with Id {id} deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("DeleteByIndustry/{industryId}")]
+        public async Task<IActionResult> DeleteByIndustry(int industryId)
+        {
+            try
+            {
+                var deletedCount = await _reportRepository.DeleteReportsByIndustryAsync(industryId);
+
+                if (deletedCount == 0)
+                    return NotFound($"No reports found for IndustryId {industryId}.");
+
+                return Ok(new { message = $"{deletedCount} reports deleted successfully for IndustryId {industryId}." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

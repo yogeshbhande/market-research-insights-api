@@ -39,6 +39,14 @@ public class ExcelService
             // Process rows
             foreach (var row in worksheet.RowsUsed().Skip(1))
             {
+                // Check IsUploaded column
+                string uploadedFlag = headers.ContainsKey("is_uploaded")
+                                      ? row.Cell(headers["is_uploaded"]).GetString().Trim().ToLower()
+                                      : "no";
+
+                if (uploadedFlag == "yes" || uploadedFlag == "1" || uploadedFlag == "true")
+                    continue; // already uploaded, skip
+
                 string title = row.Cell(headers["title"]).GetString();
                 if (string.IsNullOrWhiteSpace(title)) continue;
 
