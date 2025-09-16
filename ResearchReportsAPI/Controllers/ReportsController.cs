@@ -26,12 +26,20 @@ namespace ResearchReportsAPI.Controllers
         [HttpGet("GetReportsByIndustry/{industryId}")]
         public async Task<IActionResult> GetReportsByIndustry(int industryId)
         {
-            var reports = await _reportRepository.GetReportsByIndustry(industryId);
+            try
+            {
+                var reports = await _reportRepository.GetReportsByIndustry(industryId);
 
-            if (reports == null || !reports.Any())
-                return NotFound($"No reports found for IndustryId {industryId}.");
+                if (reports == null || !reports.Any())
+                    return NotFound($"No reports found for IndustryId {industryId}.");
 
-            return Ok(reports);
+                return Ok(reports);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         [HttpPost("UploadExcel")]

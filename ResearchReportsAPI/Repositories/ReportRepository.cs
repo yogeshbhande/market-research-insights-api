@@ -27,8 +27,15 @@ namespace ResearchReportsAPI.Repositories
         }
         public async Task AddReportsAsync(IEnumerable<Report> reports)
         {
-            await _context.Reports.AddRangeAsync(reports);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Reports.AddRangeAsync(reports);
+                await _context.SaveChangesAsync();
+            }catch (Exception ex)
+            {
+
+            }
+
         }
     }
 }
