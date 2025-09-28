@@ -52,15 +52,9 @@ public class ExcelService
 
                 string industryName = row.Cell(headers["industry"]).GetString();
                 var industry = await _industryRepo.GetIndustryByNameAsync(industryName);
-                if (industry == null && !string.IsNullOrEmpty(industryName))
-                {
-                    industry = await _industryRepo.AddIndustryAsync(new Industry
-                    {
-                        IndustryName = industryName,
-                        CreatedBy = "System",
-                        CreatedDate = DateTime.UtcNow
-                    });
-                }
+                // if industry not found, skip this row
+                if (industry == null)
+                    continue;
 
                 reports.Add(new Report
                 {
